@@ -14,18 +14,25 @@ Plataform::Plataform(Graphics &graphics, float x, float y, float speed, const ch
     this->_speed = speed;
 }
 
+Plataform::~Plataform()
+{
+
+}
+
+Sprite *Plataform::getSprite()
+{
+    return &this->_sprite;
+}
+
 void Plataform::draw(Graphics &graphics)
 {
     this->_angle += 0.3;
-    float _realAngle = (int)this->_angle;
-
-
 
     this->_posX = (this->_posX + this->_speed);
-    this->_posY += sin(_realAngle);
+    this->_posY = this->_posY + sin(this->_angle);
 
 
-    this->_sprite.draw(graphics, this->_posX, this->_posY, 0.5, 0.5, false);
+    this->_sprite.draw(graphics, this->_posX, this->_posY, 0.0, 0.5, 0.5, false);
 }
 
 float Plataform::GetPosX()

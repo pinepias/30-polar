@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "plataform.h"
+#include "enemy.h"
 
 class Graphics;
 
@@ -30,6 +31,8 @@ class Game
         */
 
         std::vector<Plataform> _plataforms; //todas as plataformas de gelo
+        std::vector<Enemy> _enemies;
+
         bool _previousHaveMorsa;
 };
 

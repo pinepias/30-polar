@@ -8,6 +8,7 @@
 #include "sprite.h"
 #include "player.h"
 #include "plataform.h"
+#include "enemy.h"
 
 Game::Game()
 {
@@ -59,10 +60,25 @@ void Game::gameLoop()
 
         if (this->_timeCountPlataform >= this->_timePlataform)
         {
-            Plataform _newPlataform(graphics, (640 + (256 / 2)), 350, -5, "../res/gfx/plataform.png");
+            const char *_plataformsTextures[] = {
+                "../res/gfx/plataform.png",
+                "../res/gfx/plataform_viza.png",
+                "../res/gfx/plataform_arvarin.png",
+            };
+            
+
+            Plataform _newPlataform(graphics, (640 + (256 / 2)), 350, -5, _plataformsTextures[rand() % 3]);
             int _morsaChance = (rand() % 100);
 
             this->_plataforms.push_back(_newPlataform);
+
+            if (_morsaChance <= 20)
+            {
+                Enemy _morsa(graphics, (640 + (256 / 2)), 350 - 80, 90, -5, "../res/gfx/morsa.png", "../res/gfx/morsa_jump.png");
+                _morsa.setPlataform(true);
+
+                this->_enemies.push_back(_morsa);
+            }
 
             this->_timePlataform = ((rand() % 30) + 60 + 1);
             this->_timeCountPlataform = 0;
@@ -76,14 +92,30 @@ void Game::gameLoop()
         {
             if (this->_plataforms[i].GetPosX() <= -256)
             {
+                SDL_DestroyTexture(this->_plataforms[i].getSprite()->getTexutre());
                 this->_plataforms.erase(this->_plataforms.begin() + i);
             }
 
             this->_plataforms[i].draw(graphics);
+
+
         }
 
-        player.getState()->draw(graphics, 100, 100, 0.5, 0.5, false);
-        background.draw(graphics, (backPosX - 640), 352, 1, 0.5, false);
+        for (int i = 0; i < this->_enemies.size(); ++i)
+        {
+            if (this->_enemies[i].getPosX() <= -256)
+            {
+                SDL_DestroyTexture(this->_enemies[i].getIdle()->getTexutre());
+                SDL_DestroyTexture(this->_enemies[i].getWalk()->getTexutre());
+
+                this->_enemies.erase(this->_enemies.begin() + i);
+            }
+
+            this->_enemies[i].draw(graphics);
+        }
+
+        player.getState()->draw(graphics, 100, 100, 0.0, 0.5, 0.5, false);
+        background.draw(graphics, (backPosX - 640), 352, 0.0, 1, 0.5, false);
 
         this->flip(graphics);
 

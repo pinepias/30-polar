@@ -9,7 +9,11 @@ class Sprite
     public:
         Sprite();
         Sprite(Graphics &graphics, const char *filePath, int frameX, float time);
-        void draw(Graphics &graphics, float x, float y, float scaleX, float scaleY, bool play);
+        ~Sprite();
+
+        SDL_Texture *getTexutre();
+
+        void draw(Graphics &graphics, float x, float y, float rotation, float scaleX, float scaleY, bool play);
 
     private:
         SDL_Texture *_texture;
